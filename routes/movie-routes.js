@@ -7,6 +7,7 @@ const Composer = require("../models/Composer");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const uploadCloud = require('../config/cloudinary-settings.js');
 
 router.get("/movies", (req, res, next) => {
   Movie.find()
@@ -72,14 +73,14 @@ router.get("/movies/add-new", (req, res, next) => {
     });
 });
 
-router.post("/movies/creation", (req, res, next) => {
+router.post("/movies/creation", uploadCloud.single("theImage"), (req, res, next) => {
   let title = req.body.theTitle;
   let director = req.body.theDirector;
   let composer = req.body.theComposer;
   let cast = req.body.theCast;
   let genre = req.body.theGenre;
   let plot = req.body.thePlot;
-  let image = req.body.theImage;
+  let image = req.file.url;
   let creator = req.user._id;
   let spotifyID = req.body.theSpotifyID;
 
@@ -157,8 +158,9 @@ router.get("/movies/edit/:id", (req, res, next) => {
     });
 });
 
-router.post("/movies/update/:id", (req, res, next) => {
+router.post("/movies/update/:id", uploadCloud.single("theImage"), (req, res, next) => {
   let id = req.params.id;
+  
   Movie.findByIdAndUpdate(id, {
     title: req.body.theTitle,
     director: req.body.theDirector,
@@ -166,7 +168,7 @@ router.post("/movies/update/:id", (req, res, next) => {
     starring: req.body.theCast,
     genre: req.body.theGenre,
     plot: req.body.thePlot,
-    image: req.body.theImage,
+    image: req.file.url,
     spotifyID: req.body.theSpotifyID,
   })
     .then(result => {

@@ -6,6 +6,7 @@ const Actor = require("../models/Actor")
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const uploadCloud = require('../config/cloudinary-settings.js');
 
 router.get("/actors", (req, res, next) => {
   Actor.find()
@@ -55,12 +56,12 @@ router.get("/actors/add-new", (req, res, next) => {
   res.render("actor-views/new");
 });
 
-router.post("/actors/creation", (req, res, next) => {
+router.post("/actors/creation", uploadCloud.single("theImage"), (req, res, next) => {
   let name = req.body.theName;
   let nominations = req.body.theNominations;
   let awards = req.body.theAwards;
   let quote = req.body.theQuote;
-  let image = req.body.theImage;
+  let image = req.file.url;
 
   Actor.create({
     name: name,
@@ -100,14 +101,14 @@ router.get("/actors/edit/:id", (req, res, next) => {
     });
 });
 
-router.post("/actors/update/:id", (req, res, next) => {
+router.post("/actors/update/:id", uploadCloud.single("theImage"), (req, res, next) => {
   let id = req.params.id;
   Actor.findByIdAndUpdate(id, {
     name: req.body.theName,
     nominations: req.body.theNominations,
     awards: req.body.theAwards,
     quote: req.body.theQuote,
-    image: req.body.theImage
+    image: req.file.url,
   })
     .then(result => {
       res.redirect("/actors/details/" + id);

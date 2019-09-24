@@ -7,6 +7,7 @@ const Actor = require("../models/Actor")
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const uploadCloud = require('../config/cloudinary-settings.js');
 
 router.get("/composers", (req, res, next) => {
   Composer.find()
@@ -56,12 +57,12 @@ router.get("/composers/add-new", (req, res, next) => {
   res.render("composer-views/new");
 });
 
-router.post("/composers/creation", (req, res, next) => {
+router.post("/composers/creation", uploadCloud.single("theImage"), (req, res, next) => {
   let name = req.body.theName;
   let nominations = req.body.theNominations;
   let awards = req.body.theAwards;
   let otherProjects = req.body.theSideProjects;
-  let image = req.body.theImage;
+  let image = req.file.url;
 
   Composer.create({
     name: name,
@@ -101,14 +102,14 @@ router.get("/composers/edit/:id", (req, res, next) => {
     });
 });
 
-router.post("/composers/update/:id", (req, res, next) => {
+router.post("/composers/update/:id", uploadCloud.single("theImage"), (req, res, next) => {
   let id = req.params.id;
   Composer.findByIdAndUpdate(id, {
     name: req.body.theName,
     nominations: req.body.theNominations,
     awards: req.body.theAwards,
     quote: req.body.theQuote,
-    image: req.body.theImage
+    image: req.file.url,
   })
     .then(result => {
       res.redirect("/composers/details/" + id);

@@ -6,6 +6,7 @@ const Actor = require("../models/Actor");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const uploadCloud = require('../config/cloudinary-settings.js');
 
 router.get("/directors", (req, res, next) => {
   Director.find()
@@ -55,11 +56,11 @@ router.get("/directors/add-new", (req, res, next) => {
   res.render("director-views/new");
 });
 
-router.post("/directors/creation", (req, res, next) => {
+router.post("/directors/creation", uploadCloud.single("theImage"), (req, res, next) => {
   let name = req.body.theName;
   let occupation = req.body.theOccupation;
   let catchPhrase = req.body.theCatchPhrase;
-  let image = req.body.theImage;
+  let image = req.file.url;
 
   Director.create({
     name: name,
@@ -99,13 +100,13 @@ router.get("/directors/edit/:id", (req, res, next) => {
     });
 });
 
-router.post("/directors/update/:id", (req, res, next) => {
+router.post("/directors/update/:id", uploadCloud.single("theImage"), (req, res, next) => {
   let id = req.params.id;
   Director.findByIdAndUpdate(id, {
     name: req.body.theName,
     occupation: req.body.theOccupation,
     catchPhrase: req.body.theCatchPhrase,
-    image: req.body.theImage
+    image: req.file.url,
   })
     .then(result => {
       res.redirect("/directors/details/" + id);
