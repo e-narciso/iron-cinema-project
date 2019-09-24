@@ -40,6 +40,9 @@
     <p class="movie-description">
       {{ movie.plot }}
     </p>
+    {{#if movie.spotifyID}}
+<iframe src=`https://open.spotify.com/embed/album/{{movie.spotifyID}}` width="500" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    {{/if}}
     {{#if theUser}}
     <a
       href="/movies/edit/{{ movie._id }}"

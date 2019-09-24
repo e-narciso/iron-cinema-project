@@ -39,6 +39,18 @@
       name="theGenre"
     />
   </div>
+    <div class="form-group">
+    <label for="movieComposer">Composer</label>
+    <select class="form-control" id="movieComposer" name="theComposer">
+      <option value="" selected disabled>Please Select One</option>
+
+      {{#each composers}}
+
+      <option value="{{ this._id }}">{{ this.name }}</option>
+
+      {{/each}}
+    </select>
+  </div>
   <div class="form-group">
     <label for="theCast">Starring:</label>
     {{#each actors}}
@@ -71,6 +83,17 @@
       aria-describedby="imageHelp"
       placeholder="Poster URL"
       name="theImage"
+    />
+  </div>
+    <div class="form-group">
+    <label for="movieSoundtrack">Soundtrack Spotify ID</label>
+    <input
+      type="text"
+      class="form-control"
+      id="movieSoundtrack"
+      aria-describedby="soundtrackHelp"
+      placeholder="Spotify ID"
+      name="theSpotifyID"
     />
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
