@@ -33,6 +33,7 @@
     <div class="form-group">
     <label for="movieComposer">Composer</label>
     <select class="form-control" id="movieComposer" name="theComposer">
+      <option value=null>none available</option>
       {{#each composers}}
       {{#if this.chosen}}
       <option selected value="{{ this._id }}">{{ this.name }}</option>
@@ -46,7 +47,7 @@
     <label for="theCast">Starring:</label>
     {{#each actors}}
     <div class="form-check">
-      <input type="checkbox" value="{{ this._id }}" name="theCast" />
+      <input type="checkbox" value="{{ this._id }}" name="theCast"/>
       {{ this.name }}
       <br />
       <br />

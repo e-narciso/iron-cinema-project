@@ -1,0 +1,70 @@
+<h2 class="movies-head">Edit Information for <em>{{ composer.name }}</em></h2>
+
+<form
+  action="/composers/update/{{ composer._id }}"
+  method="POST"
+  style="width:500px; margin-left:100px"
+>
+  <div class="form-group">
+    <label for="composerName">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="composerName"
+      aria-describedby="nameHelp"
+      value="{{ composer.name }}"
+      name="theName"
+    />
+  </div>
+    <div class="form-group">
+    <label for="theNominations">Nominations [limit two]</label>
+  {{#each composer.nominations}}
+    <input
+      type="text"
+      class="form-control"
+      aria-describedby="nominationsHelp"
+      value="{{this}}"
+      name="theNominations"
+    />
+    <br />
+  {{/each}}
+  </div>
+  <div class="form-group">
+    <label for="theAwards">Awards [limit two]</label>
+  {{#each composer.awards}}
+    <input
+      type="text"
+      class="form-control"
+      aria-describedby="awardsHelp"
+      value="{{this}}"
+      name="theAwards"
+    />
+    <br />
+  {{/each}}
+  </div>
+    <div class="form-group">
+    <label for="theSideProjects">Other Projects [limit two]</label>
+  {{#each composer.otherProjects}}
+    <input
+      type="text"
+      class="form-control"
+      aria-describedby="projectsHelp"
+      value="{{this}}"
+      name="theSideProjects"
+    />
+    <br />
+  {{/each}}
+  </div>
+  <div class="form-group">
+    <label for="composerImage">Image URL</label>
+    <input
+      type="text"
+      class="form-control"
+      id="composerImage"
+      aria-describedby="imageHelp"
+      value="{{ composer.image }}"
+      name="theImage"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

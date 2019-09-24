@@ -3,6 +3,7 @@ const router = express.Router();
 const Movie = require("../models/Movie");
 const Director = require("../models/Director");
 const Actor = require("../models/Actor");
+const Composer = require("../models/Composer");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
@@ -12,7 +13,7 @@ router.get("/movies", (req, res, next) => {
     .then(allTheMovies => {
       if (req.user) {
         allTheMovies.forEach(eachMovie => {
-          if (req.user._id.equals(eachMovie.creator) || req.user.isAdmin){
+          if (req.user._id.equals(eachMovie.creator) || req.user.isAdmin) {
             eachMovie.mine = true;
           }
         });
@@ -30,6 +31,7 @@ router.get("/movies/details/:id", (req, res, next) => {
   let id = req.params.id;
   Movie.findById(id)
     .populate("director")
+    .populate("composer")
     .populate("starring")
     .then(movieObject => {
       console.log(movieObject);
@@ -47,16 +49,23 @@ router.get("/movies/add-new", (req, res, next) => {
   }
   Director.find()
     .then(allDirectors => {
-      Actor.find()
-        .then(allActors => {
-          res.render("movie-views/new", {
-            directors: allDirectors,
-            actors: allActors
+      Composer.find()
+      .then(allComposers => {
+        Actor.find()
+          .then(allActors => {
+            res.render("movie-views/new", {
+              directors: allDirectors,
+              composers: allComposers,
+              actors: allActors
+            });
+          })
+          .catch(err => {
+            next(err);
           });
-        })
-        .catch(err => {
-          next(err);
-        });
+      })
+      .catch(err => {
+        next(err);
+      });
     })
     .catch(err => {
       next(err);
@@ -66,20 +75,24 @@ router.get("/movies/add-new", (req, res, next) => {
 router.post("/movies/creation", (req, res, next) => {
   let title = req.body.theTitle;
   let director = req.body.theDirector;
+  let composer = req.body.theComposer;
   let cast = req.body.theCast;
   let genre = req.body.theGenre;
   let plot = req.body.thePlot;
   let image = req.body.theImage;
   let creator = req.user._id;
+  let spotifyID = req.body.theSpotifyID;
 
   Movie.create({
     title: title,
     director: director,
+    composer: composer,
     starring: cast,
     genre: genre,
     plot: plot,
     image: image,
-    creator: creator
+    creator: creator,
+    spotifyID: spotifyID,
   })
     .then(result => {
       res.redirect("/movies/details/" + result._id);
@@ -108,15 +121,27 @@ router.get("/movies/edit/:id", (req, res, next) => {
         .then(allActors => {
           Director.find()
             .then(allDirectors => {
-              allDirectors.forEach(eachDirector => {
-                if (eachDirector._id.equals(theMovie.director)) {
-                  eachDirector.chosen = true;
-                }
-              });
-              res.render("movie-views/edit", {
-                movie: theMovie,
-                actors: allActors,
-                directors: allDirectors
+              Composer.find()
+              .then(allComposers => {
+                allDirectors.forEach(eachDirector => {
+                  if (eachDirector._id.equals(theMovie.director)) {
+                    eachDirector.chosen = true;
+                  }
+                });
+                allComposers.forEach(eachComposer => {
+                  if (eachComposer._id.equals(theMovie.composer)) {
+                    eachComposer.chosen = true;
+                  }
+                });
+                res.render("movie-views/edit", {
+                  movie: theMovie,
+                  actors: allActors,
+                  directors: allDirectors,
+                  composers: allComposers,
+                });
+              })
+              .catch(err => {
+                next(err);
               });
             })
             .catch(err => {
@@ -137,10 +162,12 @@ router.post("/movies/update/:id", (req, res, next) => {
   Movie.findByIdAndUpdate(id, {
     title: req.body.theTitle,
     director: req.body.theDirector,
+    composer: req.body.theComposer,
     starring: req.body.theCast,
     genre: req.body.theGenre,
     plot: req.body.thePlot,
-    image: req.body.theImage
+    image: req.body.theImage,
+    spotifyID: req.body.theSpotifyID,
   })
     .then(result => {
       res.redirect("/movies/details/" + id);

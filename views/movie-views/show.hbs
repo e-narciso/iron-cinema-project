@@ -34,6 +34,16 @@
         {{/each}}
       </ul>
     </h6>
+        <h6 class="content-tagline">
+      <b
+        >Composer:
+        <a
+          href="/composers/details/{{ movie.composer._id }}"
+          class="btn-link"
+          >{{ movie.composer.name }}</a
+        ></b
+      >
+    </h6>
 
     <p>Genre: {{ movie.genre }}</p>
     <br />
@@ -41,9 +51,12 @@
       {{ movie.plot }}
     </p>
     {{#if movie.spotifyID}}
-<iframe src=`https://open.spotify.com/embed/album/{{movie.spotifyID}}` width="500" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <h6>Soundtrack: </h6>
+<iframe src="https://open.spotify.com/embed/album/{{movie.spotifyID}}" width="600" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+<br>
     {{/if}}
     {{#if theUser}}
+    <br>
     <a
       href="/movies/edit/{{ movie._id }}"
       class="btn btn-secondary btn-sm"

@@ -1,24 +1,21 @@
 <div class="row justify-content-center selected-movie">
   <div class="col-sm">
-    <img class="celeb-img" src="{{ actor.image }}" />
+    <img class="celeb-img" src="{{ composer.image }}" />
   </div>
   <div class="col-lg movie-info">
-    <a class="btn-link" href="/actors">Back to Actors</a>
+    <a class="btn-link" href="/composers">Back to Composers</a>
     <br />
     <br />
     <div class="content-heading">
       <h4>
-        <b>{{ actor.name }}</b>
+        <b>{{ composer.name }}</b>
       </h4>
     </div>
-    <blockquote class="blockquote text-left font-italic">
-      <p class="mb-0">"{{ actor.quote }}"</p>
-    </blockquote>
     <h5>
       Awards: 
     </h5>
     <ul>
-      {{#each actor.awards}}
+      {{#each composer.awards}}
         <li>{{this}}</li>
       {{/each}}
     </ul>
@@ -26,19 +23,27 @@
       Nominations: 
     </h5>
     <ul>
-      {{#each actor.nominations}}
+      {{#each composer.nominations}}
         <li>{{this}}</li>
       {{/each}}
     </ul>
-    <h6>Projects: </h6>
+    <h6>Film Scores: </h6>
     <ul>
       {{#each filteredMovies}}
       <li><a href="/movies/details/{{this._id}}" class="btn-link"><em>{{this.title}}</em></a></li>
       {{/each}}
     </ul>
+        <h5>
+      Other Projects: 
+    </h5>
+    <ul>
+      {{#each composer.otherProjects}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
     {{#if theUser}}
-      <a href="/actors/edit/{{ actor._id }}" class="btn btn-secondary btn-sm"
-      >Edit Actor Info</a
+      <a href="/actors/edit/{{ composer._id }}" class="btn btn-secondary btn-sm"
+      >Edit Composer Info</a
     >
     {{/if}}
   </div>

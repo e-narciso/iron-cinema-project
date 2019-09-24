@@ -162,6 +162,9 @@ app.use("/", movieRoutes);
 const actorRoutes = require("./routes/actor-routes");
 app.use("/", actorRoutes);
 
+const composerRoutes = require("./routes/composer-routes");
+app.use("/", composerRoutes);
+
 const userRoutes = require("./routes/user-routes");
 app.use("/", userRoutes);
 

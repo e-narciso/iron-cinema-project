@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const composerSchema = new Schema({
   name: String,
   otherProjects: Array,
-  catchPhrase: String,
+  nominations: Array,
+  awards: Array,
   image: String,
   creator: {type: Schema.Types.ObjectId, ref: 'User'},
 });
